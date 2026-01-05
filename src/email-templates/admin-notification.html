@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Contact Form Submission - 255 Agency</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
+    </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Almarai', Arial, sans-serif; background-color: #f5f5f5;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" style="width: 600px; max-width: 100%; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    
+                    <!-- Header with Orange Background and Logo -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #FF4500 0%, #ff5722 100%); padding: 30px; text-align: center;">
+                            <img src="https://www.255.ps/255-logo-white.svg" alt="255 Agency" style="width: 100px; height: auto; margin: 0 auto; display: block;" />
+                        </td>
+                    </tr>
+                    
+                    <!-- Title Section -->
+                    <tr>
+                        <td style="padding: 20px 30px 0 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #FF4500; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">NEW CONTACT SUBMISSION</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Alert Banner -->
+                    <tr>
+                        <td style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px 30px;">
+                            <p style="margin: 0; color: #856404; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;">
+                                ACTION REQUIRED: New lead received
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Main Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 22px; font-weight: bold; font-family: Arial, sans-serif;">Contact Information</h2>
+                            
+                            <!-- Contact Details Card -->
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 0 0 25px 0; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
+                                <tr>
+                                    <td style="padding: 25px;">
+                                        <!-- Name -->
+                                        <table role="presentation" style="width: 100%; margin-bottom: 15px;">
+                                            <tr>
+                                                <td style="width: 120px; vertical-align: top;">
+                                                    <p style="margin: 0; color: #666666; font-size: 13px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif;">Name</p>
+                                                </td>
+                                                <td>
+                                                    <p style="margin: 0; color: #333333; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif;">{{from_name}}</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                        <!-- Email -->
+                                        <table role="presentation" style="width: 100%; margin-bottom: 15px;">
+                                            <tr>
+                                                <td style="width: 120px; vertical-align: top;">
+                                                    <p style="margin: 0; color: #666666; font-size: 13px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif;">Email</p>
+                                                </td>
+                                                <td>
+                                                    <p style="margin: 0; color: #FF4500; font-size: 16px; font-family: Arial, sans-serif;">
+                                                        <a href="mailto:{{from_email}}" style="color: #FF4500; text-decoration: none; font-family: Arial, sans-serif;">{{from_email}}</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                        <!-- Phone -->
+                                        <table role="presentation" style="width: 100%; margin-bottom: 15px;">
+                                            <tr>
+                                                <td style="width: 120px; vertical-align: top;">
+                                                    <p style="margin: 0; color: #666666; font-size: 13px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif;">Phone</p>
+                                                </td>
+                                                <td>
+                                                    <p style="margin: 0; color: #333333; font-size: 16px; font-family: Arial, sans-serif;">
+                                                        <a href="tel:{{phone}}" style="color: #333333; text-decoration: none; font-family: Arial, sans-serif;">{{phone}}</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                        <!-- Timestamp -->
+                                        <table role="presentation" style="width: 100%;">
+                                            <tr>
+                                                <td style="width: 120px; vertical-align: top;">
+                                                    <p style="margin: 0; color: #666666; font-size: 13px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif;">Submitted</p>
+                                                </td>
+                                                <td>
+                                                    <p style="margin: 0; color: #666666; font-size: 14px; font-family: Arial, sans-serif;">{{submission_time}}</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Quick Actions -->
+                            <h3 style="margin: 30px 0 15px 0; color: #333333; font-size: 18px; font-weight: bold; font-family: Arial, sans-serif;">Quick Actions</h3>
+                            
+                            <table role="presentation" style="width: 100%;">
+                                <tr>
+                                    <td style="padding: 0 10px 10px 0; width: 50%;">
+                                        <a href="mailto:{{from_email}}" style="display: block; padding: 12px 20px; background-color: #FF4500; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: bold; border-radius: 6px; text-align: center; font-family: Arial, sans-serif;">
+                                            Reply via Email
+                                        </a>
+                                    </td>
+                                    <td style="padding: 0 0 10px 10px; width: 50%;">
+                                        <a href="tel:{{phone}}" style="display: block; padding: 12px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: bold; border-radius: 6px; text-align: center; font-family: Arial, sans-serif;">
+                                            Call Now
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Notes Section -->
+                            <table role="presentation" style="width: 100%; margin-top: 25px; border: 2px dashed #e0e0e0; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <p style="margin: 0 0 10px 0; color: #666666; font-size: 13px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif;">RESPONSE NOTES</p>
+                                        <p style="margin: 0; color: #999999; font-size: 14px; font-style: italic; font-family: Arial, sans-serif;">
+                                            Remember to follow up within 24 hours for best conversion rates.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9f9f9; padding: 20px 30px; border-top: 1px solid #e0e0e0;">
+                            <p style="margin: 0; color: #666666; font-size: 12px; text-align: center; font-family: Arial, sans-serif;">
+                                This is an automated notification from your 255 Agency website contact form.
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: #999999; font-size: 11px; text-align: center; font-family: Arial, sans-serif;">
+                                © 2025 255 Advertising Agency | Nirlaba Creative Studio 88, Future Lane
+                            </p>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
