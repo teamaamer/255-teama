@@ -118,17 +118,13 @@ export default function ScrollVideo() {
 
 	useEffect(() => {
 		const preloadAllImages = async () => {
-			const promises = [];
-			for (let i = SECTION1_START; i <= Math.min(SECTION1_END, INITIAL_PRELOAD); i++) {
-				promises.push(loadImage(i));
-			}
-			await Promise.all(promises);
-			setIsLoading(false);
-			
-			for (let i = INITIAL_PRELOAD + 1; i <= SECTION1_END; i++) {
-				loadImage(i);
+			// Load Section 1 and Section 3 in parallel
+			const section1Promises = [];
+			for (let i = SECTION1_START; i <= SECTION1_END; i++) {
+				section1Promises.push(loadImage(i));
 			}
 			
+			// Start Section 3 loading immediately (in parallel)
 			const loadSection3Aggressively = async () => {
 				const BATCH_SIZE = 20;
 				const totalFrames = SECTION3_END - SECTION3_START + 1;
@@ -152,7 +148,12 @@ export default function ScrollVideo() {
 				}
 			};
 			
+			// Start both loading processes in parallel
 			loadSection3Aggressively();
+			
+			// Wait for Section 1 to complete before hiding loading indicator
+			await Promise.all(section1Promises);
+			setIsLoading(false);
 		};
 
 		preloadAllImages();
