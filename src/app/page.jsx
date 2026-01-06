@@ -379,7 +379,7 @@ export default function Home() {
         <section aria-label="Our team" className="w-screen overflow-hidden">
           <div className="w-full">
             <Image
-              src="/designs/ourTeam.webp"
+              src="/designs/website-team-banner.jpg"
               alt="Our team"
               width={1920}
               height={1080}

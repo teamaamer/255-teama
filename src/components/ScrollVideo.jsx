@@ -4,9 +4,9 @@ import { useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const TOTAL_FRAMES = 1200;
-const MAX_CACHE_SIZE = 120;
-const PRELOAD_RANGE = 40;
-const INITIAL_PRELOAD = 50;
+const MAX_CACHE_SIZE = 150;
+const PRELOAD_RANGE = 50;
+const INITIAL_PRELOAD = 100;
 
 export default function ScrollVideo() {
 	const containerRef = useRef(null);
