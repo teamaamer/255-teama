@@ -96,8 +96,6 @@ export default function ScrollVideo() {
 	}, [cleanupCache]);
 
 	useEffect(() => {
-		if (!isInView) return;
-
 		const preloadInitialFrames = async () => {
 			const promises = [];
 			for (let i = 1; i <= INITIAL_PRELOAD; i++) {
@@ -108,7 +106,7 @@ export default function ScrollVideo() {
 		};
 
 		preloadInitialFrames();
-	}, [isInView, loadImage]);
+	}, [loadImage]);
 
 	const render = useCallback((index) => {
 		if (!isInView) return;
