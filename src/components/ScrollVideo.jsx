@@ -20,7 +20,6 @@ export default function ScrollVideo() {
 	const currentFrameRef = useRef(1);
 	const [isInView, setIsInView] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const [section3LoadingStarted, setSection3LoadingStarted] = useState(false);
 	const canvasSizeRef = useRef({ width: 1920, height: 1080 });
 
 	const { scrollYProgress } = useScroll({
@@ -118,7 +117,7 @@ export default function ScrollVideo() {
 	}, []);
 
 	useEffect(() => {
-		const preloadSection1 = async () => {
+		const preloadAllImages = async () => {
 			const promises = [];
 			for (let i = SECTION1_START; i <= Math.min(SECTION1_END, INITIAL_PRELOAD); i++) {
 				promises.push(loadImage(i));
@@ -129,45 +128,35 @@ export default function ScrollVideo() {
 			for (let i = INITIAL_PRELOAD + 1; i <= SECTION1_END; i++) {
 				loadImage(i);
 			}
-		};
-
-		preloadSection1();
-	}, [loadImage]);
-
-	useEffect(() => {
-		const unsubscribe = scrollYProgress.on('change', (latest) => {
-			if (latest >= 0.15 && !section3LoadingStarted) {
-				setSection3LoadingStarted(true);
+			
+			const loadSection3Aggressively = async () => {
+				const BATCH_SIZE = 20;
+				const totalFrames = SECTION3_END - SECTION3_START + 1;
 				
-				const loadSection3Aggressively = async () => {
-					const BATCH_SIZE = 20;
-					const totalFrames = SECTION3_END - SECTION3_START + 1;
+				for (let batch = 0; batch < Math.ceil(totalFrames / BATCH_SIZE); batch++) {
+					const batchPromises = [];
+					const start = SECTION3_START + (batch * BATCH_SIZE);
+					const end = Math.min(start + BATCH_SIZE - 1, SECTION3_END);
 					
-					for (let batch = 0; batch < Math.ceil(totalFrames / BATCH_SIZE); batch++) {
-						const batchPromises = [];
-						const start = SECTION3_START + (batch * BATCH_SIZE);
-						const end = Math.min(start + BATCH_SIZE - 1, SECTION3_END);
-						
-						for (let i = start; i <= end; i++) {
-							if (!imagesRef.current[i] && !loadingRef.current.has(i)) {
-								batchPromises.push(loadImage(i));
-							}
-						}
-						
-						await Promise.all(batchPromises);
-						
-						if (batch % 5 === 0) {
-							await new Promise(resolve => setTimeout(resolve, 10));
+					for (let i = start; i <= end; i++) {
+						if (!imagesRef.current[i] && !loadingRef.current.has(i)) {
+							batchPromises.push(loadImage(i));
 						}
 					}
-				};
-				
-				loadSection3Aggressively();
-			}
-		});
-		
-		return () => unsubscribe();
-	}, [scrollYProgress, section3LoadingStarted, loadImage]);
+					
+					await Promise.all(batchPromises);
+					
+					if (batch % 5 === 0) {
+						await new Promise(resolve => setTimeout(resolve, 10));
+					}
+				}
+			};
+			
+			loadSection3Aggressively();
+		};
+
+		preloadAllImages();
+	}, [loadImage]);
 	
 	const render = useCallback((index) => {
 		if (!isInView) return;
