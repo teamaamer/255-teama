@@ -5,8 +5,6 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 
 const SECTION1_START = 1;
 const SECTION1_END = 97;
-const SECTION3_START = 212;
-const SECTION3_END = 1299;
 const MAX_CACHE_SIZE = Infinity; // Keep all images in memory
 const PRELOAD_RANGE = 100;
 const INITIAL_PRELOAD = 100;
@@ -60,21 +58,20 @@ export default function ScrollVideo() {
 
 	const bgColor = useTransform(
 		scrollYProgress,
-		[0, 0.14, 0.15, 0.42, 0.5, 0.65, 0.8, 0.95],
-		['#E8541E', '#E8541E', '#000000', '#000000', '#E8E8E8', '#E8E8E8', '#E8E8E8', '#E8E8E8']
+		[0, 0.14, 0.15, 1],
+		['#E8541E', '#E8541E', '#000000', '#000000']
 	);
 
 	const section1Opacity = useTransform(scrollYProgress, [0, 0.12, 0.14], [1, 1, 0]);
-	const section1_5Opacity = useTransform(scrollYProgress, [0.16, 0.18, 0.26, 0.28], [0, 1, 1, 0]);
-	const section2Opacity = useTransform(scrollYProgress, [0.28, 0.30, 0.37, 0.40], [0, 1, 1, 0]);
-	const pillToggle = useTransform(scrollYProgress, [0.30, 0.35], [0, 90]);
+	const section1_5Opacity = useTransform(scrollYProgress, [0.16, 0.18, 0.60, 0.70], [0, 1, 1, 0]);
+	const section2Opacity = useTransform(scrollYProgress, [0.70, 0.75, 0.95, 1], [0, 1, 1, 1]);
+	const pillToggle = useTransform(scrollYProgress, [0.80, 0.90], [0, 90]);
 	const pillBgColor = useTransform(
 		scrollYProgress,
 		[0.30, 0.35],
 		['#808080', '#E8541E']
 	);
 	const section1ImageFrame = useTransform(scrollYProgress, [0, 0.15], [1, 97]);
-	const section3ImageFrame = useTransform(scrollYProgress, [0.40, 1], [212, 1299]);
 
 	const underlineWidth = useTransform(scrollYProgress, [0.015, 0.03], [0, 100]);
 	const underlineOpacity = useTransform(scrollYProgress, [0.015, 0.03, 0.045, 0.05], [0, 1, 1, 0]);
@@ -88,7 +85,7 @@ export default function ScrollVideo() {
 	const ellipseBottomScale = useTransform(scrollYProgress, [0.012, 0.095], [0, 1]);
 
 	const loadImage = useCallback((index) => {
-		if (index < SECTION1_START || (index > SECTION1_END && index < SECTION3_START) || index > SECTION3_END) return;
+		if (index < SECTION1_START || index > SECTION1_END) return;
 		if (imagesRef.current[index] || loadingRef.current.has(index)) {
 			return Promise.resolve(imagesRef.current[index]);
 		}
@@ -118,40 +115,11 @@ export default function ScrollVideo() {
 
 	useEffect(() => {
 		const preloadAllImages = async () => {
-			// Load Section 1 and Section 3 in parallel
 			const section1Promises = [];
 			for (let i = SECTION1_START; i <= SECTION1_END; i++) {
 				section1Promises.push(loadImage(i));
 			}
 			
-			// Start Section 3 loading immediately (in parallel)
-			const loadSection3Aggressively = async () => {
-				const BATCH_SIZE = 20;
-				const totalFrames = SECTION3_END - SECTION3_START + 1;
-				
-				for (let batch = 0; batch < Math.ceil(totalFrames / BATCH_SIZE); batch++) {
-					const batchPromises = [];
-					const start = SECTION3_START + (batch * BATCH_SIZE);
-					const end = Math.min(start + BATCH_SIZE - 1, SECTION3_END);
-					
-					for (let i = start; i <= end; i++) {
-						if (!imagesRef.current[i] && !loadingRef.current.has(i)) {
-							batchPromises.push(loadImage(i));
-						}
-					}
-					
-					await Promise.all(batchPromises);
-					
-					if (batch % 5 === 0) {
-						await new Promise(resolve => setTimeout(resolve, 10));
-					}
-				}
-			};
-			
-			// Start both loading processes in parallel
-			loadSection3Aggressively();
-			
-			// Wait for Section 1 to complete before hiding loading indicator
 			await Promise.all(section1Promises);
 			setIsLoading(false);
 		};
@@ -179,11 +147,11 @@ export default function ScrollVideo() {
 			}
 
 			const minFrame = Math.max(SECTION1_START, roundedIndex - PRELOAD_RANGE);
-			const maxFrame = Math.min(SECTION3_END, roundedIndex + PRELOAD_RANGE);
+			const maxFrame = Math.min(SECTION1_END, roundedIndex + PRELOAD_RANGE);
 			
 			for (let i = minFrame; i <= maxFrame; i++) {
 				if (!imagesRef.current[i] && !loadingRef.current.has(i)) {
-					if ((i >= SECTION1_START && i <= SECTION1_END) || (i >= SECTION3_START && i <= SECTION3_END)) {
+					if (i >= SECTION1_START && i <= SECTION1_END) {
 						loadImage(i);
 					}
 				}
@@ -192,16 +160,9 @@ export default function ScrollVideo() {
 	}, [isInView, loadImage]);
 
 	const section1Frame = useTransform(scrollYProgress, [0, 0.15], [SECTION1_START, SECTION1_END]);
-	const section3Frame = useTransform(scrollYProgress, [0.40, 1], [SECTION3_START, SECTION3_END]);
 
 	useMotionValueEvent(section1Frame, 'change', (latest) => {
 		if (scrollYProgress.get() <= 0.15) {
-			render(latest);
-		}
-	});
-
-	useMotionValueEvent(section3Frame, 'change', (latest) => {
-		if (scrollYProgress.get() >= 0.40) {
 			render(latest);
 		}
 	});
@@ -224,7 +185,7 @@ export default function ScrollVideo() {
 		<div
 			ref={containerRef}
 			style={{
-				height: '1500vh',
+				height: '500vh',
 				position: 'relative',
 				width: '100vw',
 			}}
@@ -330,8 +291,8 @@ export default function ScrollVideo() {
 						objectFit: 'contain',
 						opacity: useTransform(
 							scrollYProgress,
-							[0, 0.14, 0.15, 0.28, 0.39, 0.40, 1],
-							[isLoading ? 0.3 : 1, isLoading ? 0.3 : 1, 0, 0, 0, isLoading ? 0.3 : 1, isLoading ? 0.3 : 1]
+							[0, 0.14, 0.15, 0.28],
+							[isLoading ? 0.3 : 1, isLoading ? 0.3 : 1, 0, 0]
 						),
 						transition: 'opacity 0.3s ease-in-out',
 					}}

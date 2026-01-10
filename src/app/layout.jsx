@@ -52,6 +52,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/255-logo.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://elfsightcdn.com/platform.js" async></script>
       </head>
       <body className={`${madaniArabic.className} ${madaniArabic.variable} relative w-full flex flex-col justify-between min-h-screen overflow-x-hidden`}>
         <LanguageProvider>
@@ -66,6 +67,7 @@ export default function RootLayout({ children }) {
           </main>
           <Footer />
           <CookieConsent />
+          <div className="elfsight-app-67db9a95-53da-41a2-be50-fbc68847f55c" data-elfsight-app-lazy></div>
         </LanguageProvider>
       </body>
     </html>

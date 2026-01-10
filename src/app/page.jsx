@@ -11,10 +11,34 @@ import SplashCursor from "@/components/SplashCursor";
 import Image from "next/image";
 import { ArrowRightCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useRef, useEffect } from "react";
 
 export default function Home() {
   const { t, currentLanguage } = useLanguage();
   const isRTL = currentLanguage === 'ar';
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
   return (
     <>
       <SplashCursor 
@@ -375,6 +399,22 @@ export default function Home() {
 
       <ScrollVideo />
 
+      <section className="relative w-screen min-h-screen bg-black flex items-center justify-center py-16">
+        <div className="w-full max-w-7xl mx-auto px-4">
+          <video
+            ref={videoRef}
+            className="w-full h-auto rounded-2xl shadow-2xl"
+            muted
+            loop
+            playsInline
+            onLoadedMetadata={(e) => e.target.playbackRate = 1.5}
+          >
+            <source src="/section3-video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
+
       <FadeIn>
         <section aria-label="Our team" className="w-screen overflow-hidden">
           <div className="w-full">
@@ -397,16 +437,59 @@ export default function Home() {
 
       <FadeIn>
         <section aria-label="Our clients" className="w-screen h-screen overflow-hidden">
-          <div className="w-full h-full">
-            <Image
-              src="/designs/ourClients.webp"
-              alt="Our clients"
-              width={1920}
-              height={1080}
-              className="w-full h-full object-contain"
-              loading="lazy"
-              quality={75}
-            />
+          <style jsx>{`
+            @keyframes slideHorizontal {
+              0% {
+                transform: translateX(0);
+              }
+              100% {
+                transform: translateX(-50%);
+              }
+            }
+            @media (max-width: 1023px) {
+              .mobile-slider-container {
+                display: flex;
+                animation: slideHorizontal 15s linear infinite;
+              }
+            }
+          `}</style>
+          <div className="w-full h-full relative">
+            {/* Desktop: Static full image */}
+            <div className="hidden lg:block w-full h-full">
+              <Image
+                src="/designs/ourClients.webp"
+                alt="Our clients"
+                width={1920}
+                height={1080}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                quality={75}
+              />
+            </div>
+            
+            {/* Mobile/Tablet: Slider animation */}
+            <div className="lg:hidden w-full h-full overflow-hidden">
+              <div className="mobile-slider-container h-full">
+                <Image
+                  src="/designs/ourClients.webp"
+                  alt="Our clients"
+                  width={1920}
+                  height={1080}
+                  className="h-full w-auto object-cover flex-shrink-0"
+                  loading="lazy"
+                  quality={75}
+                />
+                <Image
+                  src="/designs/ourClients.webp"
+                  alt="Our clients"
+                  width={1920}
+                  height={1080}
+                  className="h-full w-auto object-cover flex-shrink-0"
+                  loading="lazy"
+                  quality={75}
+                />
+              </div>
+            </div>
           </div>
         </section>
       </FadeIn>
